@@ -26,37 +26,46 @@ jsai2016ptb.py:
 
 モデルの構成:
 モデルは4層のニューラルネットワークになっています。
-第1層：単語埋込み層 650ニューロン
-第2層：LSTM 650ニューロン
-第3層：LSTM 650ニューロン
-第4層：ソフトマックス層 10000ニューロン
+- 第1層：単語埋込み層 650ニューロン
+- 第2層：LSTM 650ニューロン
+- 第3層：LSTM 650ニューロン
+- 第4層：ソフトマックス層 10000ニューロン
 
 変更したハイパーパラメータは以下のとおり:
 
+```python
 # n_epoch = 39   # number of epochs
 n_epoch = 10
+```
 どこまで学習させるか。気が短いから少なくした。
 
+```python
 # batchsize = 20   # minibatch size
 batchsize = 500
+```
 ミニバッチのサイズ。長期の系列を学習させる必要がるため。25 倍の長さにした。
 
+```python
 # bprop_len = 35   # length of truncated BPTT
 bprop_len = 35
+```
 BPTT の過去へのさかのぼり。35 だと十分だろうけれど，学習の高速化のため 5 に変更
 
+```python
 # grad_clip = 5    # gradient norm threshold to clip
 grad_clip = 1
+```
 勾配クリップの値 Graves に従って 1 に変更
 
 使用するデータセット：
-jsai2016ptb.train.txt
-jsai2016ptb.test.txt
-jsai2016ptb.valid.txt
+* jsai2016ptb.train.txt
+* jsai2016ptb.test.txt
+* jsai2016ptb.valid.txt
 
 コマンドライン:
+```python
 python jsa2015ptb.py
-
+```
 
 2. 対話モデル
 
@@ -66,13 +75,13 @@ python jsa2015ptb.py
 対話モデルを図示すると下図のようになる。図では上段の LSTM が Q すなわち
 質問文，下段の LSTM が A すなわち対応する応答文である。
 
-<sos>     ...     <eos>    <pad>     ...     <pad>    <sos>    ...
-LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM
- |        |        |        |        |        |        |        |
- |        |        |        |        |        |        |        |
- v        v        v        v        v        v        v        v
-<pad>    ....     <pad>    <sos>    ...     <eos>    <pad>    ....
-LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM
+> <sos>     ...     <eos>    <pad>     ...     <pad>    <sos>    ...
+> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM
+>  |        |        |        |        |        |        |        |
+>  |        |        |        |        |        |        |        |
+>  v        v        v        v        v        v        v        v
+> <pad>    ....     <pad>    <sos>    ...     <eos>    <pad>    ....
+> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM
 
 上の LSTM の第2層の文脈情報が下の LSTM の第1層への入力となる。
 
@@ -81,14 +90,13 @@ LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM
 Sutskever らのモデルに従えば厳密な対話モデルは，LSTM から LSTM への
 矢印が一回だけです。
 
-<sos>     ...     <eos>    <pad>     ...     <pad>    <sos>    ...
-LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM
-                   |
-                   |
-                   v
-<pad>    ....     <pad>    <sos>    ...     <eos>    <pad>    ....
-LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM
+> <sos>     ...     <eos>    <pad>     ...     <pad>    <sos>    ...
+> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM
+>                   |
+>                   |
+>                   v
+> <pad>    ....     <pad>    <sos>    ...     <eos>    <pad>    ....
+> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM
 
 これからつくります。ゴメンナサイ。
 
-# jsai2016
