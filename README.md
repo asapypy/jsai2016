@@ -75,28 +75,30 @@ python jsa2015ptb.py
 対話モデルを図示すると下図のようになる。図では上段の LSTM が Q すなわち
 質問文，下段の LSTM が A すなわち対応する応答文である。
 
-> <sos>     ...     <eos>    <pad>     ...     <pad>    <sos>    ...
-> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM
->  |        |        |        |        |        |        |        |
->  |        |        |        |        |        |        |        |
->  v        v        v        v        v        v        v        v
-> <pad>    ....     <pad>    <sos>    ...     <eos>    <pad>    ....
-> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM
-
+```python
+# <sos>     ...     <eos>    <pad>     ...     <pad>    <sos>    ...
+# LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM
+#  |        |        |        |        |        |        |        |
+#  |        |        |        |        |        |        |        |
+#  v        v        v        v        v        v        v        v
+# <pad>    ....     <pad>    <sos>    ...     <eos>    <pad>    ....
+# LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM
+```
 上の LSTM の第2層の文脈情報が下の LSTM の第1層への入力となる。
 
 3. S2Sモデル
 
 Sutskever らのモデルに従えば厳密な対話モデルは，LSTM から LSTM への
 矢印が一回だけです。
-
-> <sos>     ...     <eos>    <pad>     ...     <pad>    <sos>    ...
-> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM
->                   |
->                   |
->                   v
-> <pad>    ....     <pad>    <sos>    ...     <eos>    <pad>    ....
-> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM
+```python
+# <sos>     ...     <eos>    <pad>     ...     <pad>    <sos>    ...
+# LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM
+#                   |
+#                   |
+#                   v
+# <pad>    ....     <pad>    <sos>    ...     <eos>    <pad>    ....
+# LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM
+```
 
 これからつくります。ゴメンナサイ。
 
