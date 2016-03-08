@@ -20,7 +20,7 @@ for f in ptb.*; do
 done
 ```
 
-1. ベースラインモデル
+# 1. ベースラインモデル
 
 jsai2016ptb.py:
 
@@ -67,7 +67,7 @@ grad_clip = 1
 python jsa2015ptb.py
 ```
 
-2. 対話モデル
+# 2. 対話モデル
 
 ファイル名: jsai2016ptb_dialogue.py
 
@@ -86,7 +86,7 @@ python jsa2015ptb.py
 ```
 上の LSTM の第2層の文脈情報が下の LSTM の第1層への入力となる。
 
-3. S2Sモデル
+# 3. S2Sモデル
 
 Sutskever らのモデルに従えば厳密な対話モデルは，LSTM から LSTM への
 矢印が一回だけです。
