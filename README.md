@@ -1,14 +1,17 @@
-# README.md
+﻿# README.md
 
-ptb.{train,valid,test}.txt $B$r(B JSAI2016 $B$K;H$($k$h$&$K!$JX59E*$K0J2<$N%k!<%k(B
-$B$K=>$C$FJQ7A$7$^$7$?!#(Bptb.{train,valid,test}.txt $BFb$N4q?t9TL\$NJ8(B(n mod 2
-== 1, where n means line number for each sentence) $B$NJ8>O$rLd$$$NJ8(B Q, $B8eB3(B
-$B$9$k6v?t9TL\$NJ8(B(n mod 2 == 0)$B$rEz$((B A $B$H$_$J$7$F(B
+ロボケンの皆様
+============
 
-1. $B4q?t9TL\$NJ8Kv$K(B <cntnxt> $B$rA^F~$7!$2~9T%3!<%I$r:o=|!$(B
-2. $BD>8e$N4q?t9TL\$HO"7k$5$;$k(B
+ptb.{train,valid,test}.txt を JSAI2016 に使えるように，便宜的に以下のルール
+に従って変形しました。ptb.{train,valid,test}.txt 内の奇数行目の文(n mod 2
+== 1, where n means line number for each sentence) の文章を問いの文 Q, 後続
+する偶数行目の文(n mod 2 == 0)を答え A とみなして
 
-$B0J>e$r$9$k(B sed script $B$r(B convert.sed $B$K=q$$$F!$0J2<$NJQ49$r<B;\(B
+1. 奇数行目の文末に <cntnxt> を挿入し，改行コードを削除，
+2. 直後の奇数行目と連結させる
+
+以上をする sed script を convert.sed に書いて，以下の変換を実施
 
 ```bash
 for f in ptb.*; do
@@ -17,51 +20,51 @@ for f in ptb.*; do
 done
 ```
 
-1. $B%Y!<%9%i%$%s%b%G%k(B
+1. ベースラインモデル
 
 jsai2016ptb.py:
 
-$B%b%G%k$N9=@.(B:
-$B%b%G%k$O(B4$BAX$N%K%e!<%i%k%M%C%H%o!<%/$K$J$C$F$$$^$9!#(B
-$BBh(B1$BAX!'C18lKd9~$_AX(B 650$B%K%e!<%m%s(B
-$BBh(B2$BAX!'(BLSTM 650$B%K%e!<%m%s(B
-$BBh(B3$BAX!'(BLSTM 650$B%K%e!<%m%s(B
-$BBh(B4$BAX!'%=%U%H%^%C%/%9AX(B 10000$B%K%e!<%m%s(B
+モデルの構成:
+モデルは4層のニューラルネットワークになっています。
+第1層：単語埋込み層 650ニューロン
+第2層：LSTM 650ニューロン
+第3層：LSTM 650ニューロン
+第4層：ソフトマックス層 10000ニューロン
 
-$BJQ99$7$?%O%$%Q!<%Q%i%a!<%?$O0J2<$N$H$*$j(B:
+変更したハイパーパラメータは以下のとおり:
 
 # n_epoch = 39   # number of epochs
 n_epoch = 10
-$B$I$3$^$G3X=,$5$;$k$+!#5$$,C;$$$+$i>/$J$/$7$?!#(B
+どこまで学習させるか。気が短いから少なくした。
 
 # batchsize = 20   # minibatch size
 batchsize = 500
-$B%_%K%P%C%A$N%5%$%:!#D94|$N7ONs$r3X=,$5$;$kI,MW$,$k$?$a!#(B25 $BG\$ND9$5$K$7$?!#(B
+ミニバッチのサイズ。長期の系列を学習させる必要がるため。25 倍の長さにした。
 
 # bprop_len = 35   # length of truncated BPTT
 bprop_len = 35
-BPTT $B$N2a5n$X$N$5$+$N$\$j!#(B35 $B$@$H==J,$@$m$&$1$l$I!$3X=,$N9bB.2=$N$?$a(B 5 $B$KJQ99(B
+BPTT の過去へのさかのぼり。35 だと十分だろうけれど，学習の高速化のため 5 に変更
 
 # grad_clip = 5    # gradient norm threshold to clip
 grad_clip = 1
-$B8{G[%/%j%C%W$NCM(B Graves $B$K=>$C$F(B 1 $B$KJQ99(B
+勾配クリップの値 Graves に従って 1 に変更
 
-$B;HMQ$9$k%G!<%?%;%C%H!'(B
+使用するデータセット：
 jsai2016ptb.train.txt
 jsai2016ptb.test.txt
 jsai2016ptb.valid.txt
 
-$B%3%^%s%I%i%$%s(B:
+コマンドライン:
 python jsa2015ptb.py
 
 
-2. $BBPOC%b%G%k(B
+2. 対話モデル
 
-$B%U%!%$%kL>(B: jsai2016ptb_dialogue.py
+ファイル名: jsai2016ptb_dialogue.py
 
-$B>e5-$r!$(BQ, A $B$K(B 2 $BOC<T$KJ,$1!$$=$l$>$l$NH/OC$K(B <pad> $B$rKd$a$k$3$H$r9T$C$?!#(B
-$BBPOC%b%G%k$r?^<($9$k$H2<?^$N$h$&$K$J$k!#?^$G$O>eCJ$N(B LSTM $B$,(B Q $B$9$J$o$A(B
-$B<ALdJ8!$2<CJ$N(B LSTM $B$,(B A $B$9$J$o$ABP1~$9$k1~EzJ8$G$"$k!#(B
+上記を，Q, A に 2 話者に分け，それぞれの発話に <pad> を埋めることを行った。
+対話モデルを図示すると下図のようになる。図では上段の LSTM が Q すなわち
+質問文，下段の LSTM が A すなわち対応する応答文である。
 
 <sos>     ...     <eos>    <pad>     ...     <pad>    <sos>    ...
 LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM
@@ -71,12 +74,12 @@ LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM
 <pad>    ....     <pad>    <sos>    ...     <eos>    <pad>    ....
 LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM
 
-$B>e$N(B LSTM $B$NBh(B2$BAX$NJ8L.>pJs$,2<$N(B LSTM $B$NBh(B1$BAX$X$NF~NO$H$J$k!#(B
+上の LSTM の第2層の文脈情報が下の LSTM の第1層への入力となる。
 
-3. S2S$B%b%G%k(B
+3. S2Sモデル
 
-Sutskever $B$i$N%b%G%k$K=>$($P87L)$JBPOC%b%G%k$O!$(BLSTM $B$+$i(B LSTM $B$X$N(B
-$BLp0u$,0l2s$@$1$G$9!#(B
+Sutskever らのモデルに従えば厳密な対話モデルは，LSTM から LSTM への
+矢印が一回だけです。
 
 <sos>     ...     <eos>    <pad>     ...     <pad>    <sos>    ...
 LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM
@@ -86,6 +89,6 @@ LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM
 <pad>    ....     <pad>    <sos>    ...     <eos>    <pad>    ....
 LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM --> LSTM
 
-$B$3$l$+$i$D$/$j$^$9!#%4%a%s%J%5%$!#(B
+これからつくります。ゴメンナサイ。
 
 # jsai2016
