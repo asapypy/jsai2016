@@ -27,6 +27,10 @@ import jsai2016models
 parser = argparse.ArgumentParser()
 parser.add_argument('--initmodel', '-m', default='',
                     help='Initialize the model from given file')
+parser.add_argument('--initmodelQ', '-q', default='',
+                    help='Initialize the modelQ from given file')
+parser.add_argument('--initmodelA', '-a', default='',
+                    help='Initialize the modelA from given file')
 parser.add_argument('--resume', '-r', default='',
                     help='Resume the optimization from snapshot')
 parser.add_argument('--gpu', '-g', default=-1, type=int,
@@ -126,6 +130,12 @@ optimizer.add_hook(chainer.optimizer.GradientClipping(grad_clip))
 if args.initmodel:
     print('Load model from', args.initmodel)
     serializers.load_npz(args.initmodel, model)
+if args.initmodelQ:
+    print('Load modelQ from', args.initmodelQ)
+    serializers.load_npz(args.initmodelQ, modelQ)
+if args.initmodelA:
+    print('Load modelA from', args.initmodelA)
+    serializers.load_npz(args.initmodelA, modelA)
 if args.resume:
     print('Load optimizer state from', args.resume)
     serializers.load_npz(args.resume, optimizer)
@@ -133,13 +143,13 @@ if args.resume:
 
 def evaluate(dataset):
     # Evaluation routine
-    evaluator = model.copy()  # to use different state
+    evaluator = model.copy()           # to use different state
     evaluator.predictor.reset_state()  # initialize state
 
-    evaluatorQ = modelQ.copy()  # to use different state
+    evaluatorQ = modelQ.copy()          # to use different state
     evaluatorQ.predictor.reset_state()  # initialize state
 
-    evaluatorA = modelA.copy()  # to use different state
+    evaluatorA = modelA.copy()          # to use different state
     evaluatorA.predictor.reset_state()  # initialize state
 
     sum_log_perp = 0
@@ -190,6 +200,7 @@ whole_len = train_data.shape[0]
 print('whole_len=',whole_len)
 # print(train_data.shape)
 jump = whole_len // batchsize
+# jump = 5  # Thanks for Kenji Iwai to debug
 print('batchsize=',batchsize,'  # length of minibatch')
 print('jump=',jump,'  # number of minibatches')
 cur_log_perp = xp.zeros(())
