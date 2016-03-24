@@ -15,8 +15,11 @@ python get_mlquestions_praw.y NUM
 ```bash
 pip intall praw
 ```
+Q に相当する文章は，title と selftext, A に相当する文章が comment no. NUM --> 以下になっています。
+多分これで html のタグは完全に取り除かれているはずです。
 
-# 0. ptb
+
+# 1. ptb
 
 ptb.{train,valid,test}.txt を JSAI2016 に使えるように，便宜的に以下のルール
 に従って変形しました。ptb.{train,valid,test}.txt 内の奇数行目の文(n mod 2
@@ -35,7 +38,7 @@ for f in ptb.*; do
 done
 ```
 
-# 1. ベースラインモデル
+# 2. ベースラインモデル
 
 jsai2016ptb.py:
 
@@ -82,7 +85,7 @@ grad_clip = 1
 python jsa2015ptb.py
 ```
 
-# 2. 対話モデル
+# 3. 対話モデル
 
 ファイル名: jsai2016ptb_dialogue.py
 
@@ -101,7 +104,7 @@ python jsa2015ptb.py
 ```
 上の LSTM の第2層の文脈情報が下の LSTM の第1層への入力となる。
 
-# 3. S2Sモデル
+# 4. S2Sモデル
 
 Sutskever らのモデルに従えば厳密な対話モデルは，LSTM から LSTM への
 矢印が一回だけです。
