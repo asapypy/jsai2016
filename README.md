@@ -16,6 +16,7 @@ python get_mlquestions_praw.y NUM
 pip intall praw
 ```
 
+# 0. ptb
 
 ptb.{train,valid,test}.txt を JSAI2016 に使えるように，便宜的に以下のルール
 に従って変形しました。ptb.{train,valid,test}.txt 内の奇数行目の文(n mod 2
