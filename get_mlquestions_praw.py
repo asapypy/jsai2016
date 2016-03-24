@@ -32,7 +32,7 @@ def scrape(limit = 20):
             print('num_comments=', subreddit.num_comments)
             print('len(subreddit.comments)=', len(subreddit.comments))
             for i, com in enumerate(subreddit.comments):
-                print('comment no.=', i, '--> ', subreddit.comments[i].body)
+                print('comment no.=', i, '--> ', subreddit.comments[i].body.encode('utf-8'))
         else:
             print('no comments')
         print('-------------')
