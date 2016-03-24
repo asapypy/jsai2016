@@ -19,7 +19,7 @@ def scrape(limit = 20):
     subredditList = reddit.get_subreddit('mlquestions').get_hot(limit = limit)
     for n, subreddit in enumerate(subredditList):
         print('Question= ', n, end=' ')
-        print('title=', subreddit.title)
+        print('title=', subreddit.title.encode('utf-8'))
 # print(subreddit.num_comments, 
 #              repr(subreddit.domain), 
 #              repr(subreddit.fullname), 
