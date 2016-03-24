@@ -3,6 +3,20 @@
 ロボケンの皆様
 ============
 
+
+get_mlquesitons_praw.py を公開します。使い方は
+
+```bash
+python get_mlquestions_praw.y NUM
+```
+
+です。このコードを実行する前に **praw** をインストールしてください
+
+```bash
+pip intall praw
+```
+
+
 ptb.{train,valid,test}.txt を JSAI2016 に使えるように，便宜的に以下のルール
 に従って変形しました。ptb.{train,valid,test}.txt 内の奇数行目の文(n mod 2
 == 1, where n means line number for each sentence) の文章を問いの文 Q, 後続
