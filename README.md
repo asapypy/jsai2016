@@ -25,6 +25,7 @@ Q に相当する文章は，title と selftext, A に相当する文章が comm
 
 def scrape(limit = 20): の次の行の最後 .get_hot(limit=None) とすると制限が外れてすべてのスレッドを読み込んでくれます。
 
+結果ですが freqdist_ml.py で描くことができます。データファイル名は all_mlquestions.txt を仮定しました。
 
 # 1. ptb
 
