@@ -3,8 +3,7 @@
 ロボケンの皆様
 ============
 
-
-get_mlquesitons_praw.py を公開します。使い方は
+## get_mlquesitons_praw.py を公開します。使い方は
 
 ```bash
 python get_mlquestions_praw.y NUM
@@ -25,7 +24,13 @@ Q に相当する文章は，title と selftext, A に相当する文章が comm
 
 def scrape(limit = 20): の次の行の最後 .get_hot(limit=None) とすると制限が外れてすべてのスレッドを読み込んでくれます。
 
-結果ですが freqdist_ml.py で描くことができます。データファイル名は all_mlquestions.txt を仮定しました。
+## freqdist_ml.py
+
+結果は freqdist_ml.py で描くことができます。データファイル名は all_mlquestions.txt を仮定しました。
+
+## jsai2016_setUNK.py
+
+頻度 5 以下の単語を UNK token に変換するコードです。データファイル名は上記の all_mlquestions.txt を仮定しています。
 
 # 1. ptb
 
